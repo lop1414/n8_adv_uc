@@ -93,3 +93,9 @@ $router->group([
         $router->post('read', '\\App\Common\Controllers\Admin\ConvertCallbackStrategyController@read');
     });
 });
+
+
+$router->group(['middleware' => ['access_control_allow_origin']], function () use ($router) {
+    // 点击
+    $router->get('Front/click', 'Front\AdvClickController@index');
+});

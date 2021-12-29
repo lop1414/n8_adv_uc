@@ -55,9 +55,4 @@ class UcCampaignService extends UcService
         if(empty($saveData)) return;
         $this->batchSave( UcCampaignModel::class,$saveData);
     }
-
-
-
-
-
 }

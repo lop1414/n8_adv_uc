@@ -4,37 +4,29 @@ namespace App\Sdks\Uc;
 
 
 
-use App\Sdks\Uc\Traits\AccountFeed;
-use App\Sdks\Uc\Traits\AdgroupFeed;
-use App\Sdks\Uc\Traits\CampaignFeed;
-use App\Sdks\Uc\Traits\CreativeFeed;
-use App\Sdks\Uc\Traits\Image;
-use App\Sdks\Uc\Traits\ReportFeed;
+use App\Sdks\Uc\Traits\Adgroup;
+use App\Sdks\Uc\Traits\Campaign;
+use App\Sdks\Uc\Traits\Creative;
+use App\Sdks\Uc\Traits\Report;
 use App\Sdks\Uc\Traits\Error;
 use App\Sdks\Uc\Traits\MultiRequest;
-use App\Sdks\Uc\Traits\OcpcToken;
 use App\Sdks\Uc\Traits\Token;
 use App\Sdks\Uc\Traits\Account;
 use App\Sdks\Uc\Traits\AccountPassword;
 use App\Sdks\Uc\Traits\Request;
-use App\Sdks\Uc\Traits\Video;
 
 class Uc
 {
     use Account;
     use AccountPassword;
     use Token;
-    use OcpcToken;
     use Request;
     use MultiRequest;
     use Error;
-    use AccountFeed;
-    use CampaignFeed;
-    use AdgroupFeed;
-    use CreativeFeed;
-    use ReportFeed;
-    use Image;
-    use Video;
+    use Adgroup;
+    use Campaign;
+    use Creative;
+    use Report;
 
     /**
      * 公共接口地址

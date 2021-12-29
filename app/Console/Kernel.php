@@ -2,6 +2,8 @@
 
 namespace App\Console;
 
+use App\Common\Console\Queue\QueueClickCommand;
+use App\Console\Commands\Uc\UcSyncCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
 
@@ -13,7 +15,10 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        //
+        UcSyncCommand::class,
+
+        // 队列
+        QueueClickCommand::class
     ];
 
     /**
@@ -24,6 +29,12 @@ class Kernel extends ConsoleKernel
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        // 队列
+        $schedule->command('queue:click')->cron('* * * * *');
+
+        // 百度同步任务
+        $schedule->command('uc:sync --type=adgroup')->cron('*/20 * * * *');
+        $schedule->command('uc:sync --type=campaign')->cron('*/20 * * * *');
+        $schedule->command('uc:sync --type=creative')->cron('*/20 * * * *');
     }
 }

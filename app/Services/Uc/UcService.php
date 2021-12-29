@@ -3,6 +3,7 @@
 namespace App\Services\Uc;
 
 use App\Common\Enums\StatusEnum;
+use App\Common\Models\BaseModel;
 use App\Common\Services\BaseService;
 use App\Common\Tools\CustomException;
 use App\Models\Uc\UcAccountModel;
@@ -110,8 +111,7 @@ class UcService extends BaseService
             $accountIds = $option['account_ids'];
         }
 
-        $accountList = $this->getSubAccountGroup($accountIds);
-
+        $accountList = array_merge($this->getSubAccountGroup($accountIds),$this->getNoSubAccountGroup($accountIds));
         foreach ($accountList as $groups){
             $this->setSdk($groups['name'],$groups['password'],$groups['token']);
 
@@ -124,8 +124,6 @@ class UcService extends BaseService
             $this->syncItem($groups['list']);
 
         }
-
-
     }
 
 
@@ -200,6 +198,30 @@ class UcService extends BaseService
 //        return $baiduAccountIds->toArray();
 //    }
 
+    /**
+     * @param array $accountIds
+     * @return array
+     * 获取没有子账户的账户信息
+     */
+    public function getNoSubAccountGroup(array $accountIds = []){
+        $ucAccountModel = new UcAccountModel();
+        $builder = $ucAccountModel->where('status', StatusEnum::ENABLE);
+
+        if(!empty($accountIds)){
+            $builder->whereIn('account_id',$accountIds);
+        }
+
+        $accounts = $builder->where('parent_id', 0)->get();
+
+        if($accounts->isEmpty()) return [];
+        $group = [];
+        foreach ($accounts as $account){
+            $group[$account->account_id] = $account->toArray();
+            $group[$account->account_id]['list'][] = $account;
+        }
+        return $group;
+    }
+
 
     /**
      * @param array $accountIds
@@ -237,8 +259,8 @@ class UcService extends BaseService
      * 获取子账号
      */
     public function getSubAccount(array $accountIds = []){
-        $baiduAccountModel = new UcAccountModel();
-        $builder = $baiduAccountModel->where('status', StatusEnum::ENABLE);
+        $ucAccountModel = new UcAccountModel();
+        $builder = $ucAccountModel->where('status', StatusEnum::ENABLE);
 
         if(!empty($accountIds)){
             $accountIdsStr = implode("','", $accountIds);

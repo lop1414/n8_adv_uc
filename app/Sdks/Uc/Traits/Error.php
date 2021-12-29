@@ -52,7 +52,9 @@ trait Error
      */
     public function isAdgroupIdNotExistsByCode($code){
         $errorCodes = [
-            912401411, // 推广组不存在
+            9012008, // 推广组不存在或已删除
+            9014001, // 计划所属推广组不存在或已删除
+            9014004, // 修改的计划不存在或已删除
         ];
 
         if(in_array($code, $errorCodes)){

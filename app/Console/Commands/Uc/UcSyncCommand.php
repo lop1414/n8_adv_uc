@@ -7,8 +7,6 @@ use App\Common\Tools\CustomException;
 use App\Services\Uc\UcAdgroupService;
 use App\Services\Uc\UcCampaignService;
 use App\Services\Uc\UcCreativeService;
-use App\Services\Uc\UcCreativeTemplateService;
-use App\Services\Uc\UcService;
 
 class UcSyncCommand extends BaseCommand
 {
@@ -80,10 +78,6 @@ class UcSyncCommand extends BaseCommand
             case 'creative':
                 echo "同步创意\n";
                 $service = new UcCreativeService();
-                break;
-            case 'creative_template':
-                echo "同步样式模板\n";
-                $service = new UcCreativeTemplateService();
                 break;
             default:
                 throw new CustomException([

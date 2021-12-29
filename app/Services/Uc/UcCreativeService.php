@@ -10,10 +10,10 @@ class UcCreativeService extends UcService
 
     public function syncItem($subAccount){
 
-        $params = $this->getAdgroupParamByAccount($subAccount);
+        $params = $this->getCampaignParamByAccount($subAccount);
 
         $saveData = [];
-        $list = $this->sdk->multiGetCreative($params);
+        $list = $this->sdk->multiGetCreativeId($params);
 
         foreach ($list as $item){
             // 计划不存在处理
@@ -25,28 +25,33 @@ class UcCreativeService extends UcService
 
             $account = $this->getAccountByName($accountName);
 
-            foreach ($item['data']['body']['adGroupCreativeTemplates'] as $creative){
-                $creative['creativeTemplateContent'] = json_decode($creative['creativeTemplateContent'] ,true);
+            $campaignCreativeIds = $item['data']['body']['campaignCreativeIds'] ?? [];
+            foreach ($campaignCreativeIds as $campaignCreativeId){
+                $creativeList = $this->sdk->multiGetCreative([[
+                    'creative_ids' => $campaignCreativeId['creativeIds'],
+                    'account_name' => $accountName,
+                ]]);
 
-//                $saveData[] = [
-//                    'id'                => $creative['creativeFeedId'],
-//                    'account_id'        => $account['account_id'],
-//                    'adgroup_id'        => $creative['adgroupFeedId'],
-//                    'name'              => $creative['creativeFeedName'],
-//                    'materialstyle'     => $creative['materialstyle'],
-//                    'pause'             => $creative['pause'],
-//                    'status'            => $creative['status'],
-//                    'idea_type'         => $creative['ideaType'],
-//                    'show_mt'           => $creative['showMt'] ?? 0,
-//                    'addtime'           => date('Y-m-d H:i:s',strtotime($creative['addtime'])),
-//                    'extends'           => json_encode($creative),
-//                    'remark_status'     => '',
-//                    'created_at'        => date('Y-m-d H:i:s'),
-//                    'updated_at'        => date('Y-m-d H:i:s'),
-//                ];
+                foreach ($creativeList as $creatives) {
+                    foreach ($creatives['data']['body']['creativeTypes'] as $creative) {
+                        $saveData[] = [
+                            'id' => $creative['id'],
+                            'account_id' => $account['account_id'],
+                            'campaign_id' => $creative['campaignId'],
+                            'style' => $creative['style'],
+                            'style_type' => $creative['styleType'],
+                            'show_mode' => $creative['showMode'],
+                            'paused' => $creative['paused'],
+                            'state' => $creative['state'],
+                            'extends' => json_encode($creative),
+                            'remark_status' => '',
+                            'created_at' => date('Y-m-d H:i:s'),
+                            'updated_at' => date('Y-m-d H:i:s'),
+                        ];
+                    }
+                }
             }
         }
-        dd($list);
         if(empty($saveData)) return;
         $this->batchSave(UcCreativeModel::class,$saveData);
     }

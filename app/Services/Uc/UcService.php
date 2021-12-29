@@ -3,7 +3,6 @@
 namespace App\Services\Uc;
 
 use App\Common\Enums\StatusEnum;
-use App\Common\Models\BaseModel;
 use App\Common\Services\BaseService;
 use App\Common\Tools\CustomException;
 use App\Enums\RemarkStatusEnum;
@@ -354,6 +353,37 @@ class UcService extends BaseService
         return $params;
     }
 
+
+    /**
+     * @param $accounts
+     * @return array
+     * 获取账户下的推广计划
+     */
+    public function getCampaignParamByAccount($accounts){
+        $params = [];
+        foreach ($accounts as $account){
+            // 获取计划ID
+            $campaignIds = [];
+
+            $campaigns = (new UcCampaignModel())
+                ->where('account_id',$account['account_id'])
+                ->where('remark_status','!=',RemarkStatusEnum::DELETE)
+                ->get();
+
+            foreach ($campaigns as $campaign){
+                $this->setAccountMap($account);
+                $campaignIds[] = $campaign['id'];
+            }
+
+            if(empty($campaignIds)) continue;
+
+            $params[] = [
+                'campaign_ids'      => $campaignIds,
+                'account_name'      => $account['name']
+            ];
+        }
+        return $params;
+    }
 
 
 

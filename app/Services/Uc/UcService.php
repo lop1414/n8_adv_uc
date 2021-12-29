@@ -6,7 +6,11 @@ use App\Common\Enums\StatusEnum;
 use App\Common\Models\BaseModel;
 use App\Common\Services\BaseService;
 use App\Common\Tools\CustomException;
+use App\Enums\RemarkStatusEnum;
 use App\Models\Uc\UcAccountModel;
+use App\Models\Uc\UcAdgroupModel;
+use App\Models\Uc\UcCampaignModel;
+use App\Models\Uc\UcCreativeModel;
 use App\Sdks\Uc\Uc;
 
 
@@ -138,39 +142,39 @@ class UcService extends BaseService
 
     /**
      * @param $item
-     * 计划不存在 异常处理 - 更新备注状态
+     * 推广组不存在 异常处理 - 更新备注状态
      */
- /*   public function handleCampaignFeedIdNotExists($item){
+    public function handleAdgroupIdNotExists($item){
 
         foreach($item['data']['header']['failures'] as $failure){
 
-            if(!$this->sdk->isCampaignFeedIdNotExistsByCode($failure['code'])){
+            if(!$this->sdk->isAdgroupIdNotExistsByCode($failure['code'])){
                 continue;
             }
 
-            $campaign = (new BaiDuCampaignModel())
+            $adgroup = (new UcAdgroupModel())
                 ->where('id',$failure['id'])
                 ->first();
-            if(empty($campaign)) continue;
+            if(empty($adgroup)) continue;
 
-            $campaign->remark_status =  RemarkStatusEnum::DELETE;
-            $campaign->save();
+            $adgroup->remark_status =  RemarkStatusEnum::DELETE;
+            $adgroup->save();
 
-            $adgroups = (new BaiDuAdgroupModel())
-                ->where('campaign_id',$failure['id'])
+            $campaigns = (new UcCampaignModel())
+                ->where('adgroup_id',$failure['id'])
                 ->get();
 
-            foreach ($adgroups as $adgroup){
+            foreach ($campaigns as $campaign){
 
-                $adgroup->remark_status =  RemarkStatusEnum::DELETE;
-                $adgroup->save();
+                $campaign->remark_status =  RemarkStatusEnum::DELETE;
+                $campaign->save();
 
-                (new BaiDuCreativeModel())
-                    ->where('adgroup_id',$adgroup['id'])
+                (new UcCreativeModel())
+                    ->where('adgroup_id',$campaign['id'])
                     ->update(['remark_status' => RemarkStatusEnum::DELETE]);
             }
         }
-    }*/
+    }
 
 
 
@@ -319,32 +323,36 @@ class UcService extends BaseService
     public function sdkMultiGetList($accountNames,$param,$page,$pageSize){}
 
 
-
-   /* public function getCampaignParamByAccount($accounts){
+    /**
+     * @param $accounts
+     * @return array
+     * 获取账户下的推广组
+     */
+    public function getAdgroupParamByAccount($accounts){
         $params = [];
         foreach ($accounts as $account){
             // 获取计划ID
-            $campaignIds = [];
+            $adgroupIds = [];
 
-            $campaigns = (new BaiDuCampaignModel())
+            $adgroups = (new UcAdgroupModel())
                 ->where('account_id',$account['account_id'])
                 ->where('remark_status','!=',RemarkStatusEnum::DELETE)
                 ->get();
 
-            foreach ($campaigns as $campaign){
+            foreach ($adgroups as $adgroup){
                 $this->setAccountMap($account);
-                $campaignIds[] = $campaign['id'];
+                $adgroupIds[] = $adgroup['id'];
             }
 
-            if(empty($campaignIds)) continue;
+            if(empty($adgroupIds)) continue;
 
             $params[] = [
-                'campaign_ids'      => $campaignIds,
+                'adgroup_ids'      => $adgroupIds,
                 'account_name'      => $account['name']
             ];
         }
         return $params;
-    }*/
+    }
 
 
 

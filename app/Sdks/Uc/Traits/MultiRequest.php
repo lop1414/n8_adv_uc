@@ -205,7 +205,6 @@ Functions::consoleDump($ch);
                     'Content-Type: application/json; charset=utf-8',
                 ]
             ];
-
         }
         return $this->multiPublicRequest($curlOptions);
     }

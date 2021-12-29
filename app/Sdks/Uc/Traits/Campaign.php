@@ -14,7 +14,7 @@ trait Campaign
      * 并发获取推广组
      */
     public function multiGetCampaign($params){
-        $url = $this->getUrl('api/adgroup/getAllAdGroup');
+        $url = $this->getUrl('api/campaign/getCampaignByAdGroupId');
 
 
         $reqParams = [];
@@ -22,6 +22,9 @@ trait Campaign
             $reqParams[] = [
                 'header' =>  [
                     'target' => $item['account_name']
+                ],
+                'body' => [
+                    'adGroupIds' => $item['adgroup_ids']
                 ]
             ];
         }

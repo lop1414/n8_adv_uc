@@ -32,11 +32,11 @@ trait Error
      * @return bool
      * 有计划不存在的错误
      */
-    public function hasCampaignFeedIdNotExists($result){
+    public function hasAdgroupIdNotExists($result){
 
         $failures = $result['header']['failures'];
         foreach ($failures as $item){
-            if($this->isCampaignFeedIdNotExistsByCode($item['code'])){
+            if($this->isAdgroupIdNotExistsByCode($item['code'])){
                 return true;
             }
         }
@@ -48,11 +48,11 @@ trait Error
     /**
      * @param $code
      * @return bool
-     * 是否计划不存在的错误
+     * 是否推广组不存在的错误
      */
-    public function isCampaignFeedIdNotExistsByCode($code){
+    public function isAdgroupIdNotExistsByCode($code){
         $errorCodes = [
-            912401411, // 计划不存在
+            912401411, // 推广组不存在
         ];
 
         if(in_array($code, $errorCodes)){

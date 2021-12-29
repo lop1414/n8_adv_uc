@@ -3,15 +3,14 @@
 namespace App\Models\Uc;
 
 
-
-class UcAdgroupModel extends UcModel
+class UcCreativeModel extends UcModel
 {
     /**
      * 关联到模型的数据表
      *
      * @var string
      */
-    protected $table = 'uc_adgroups';
+    protected $table = 'uc_creatives';
 
 
     /**
@@ -26,11 +25,15 @@ class UcAdgroupModel extends UcModel
 
     protected $fillable = [
         'account_id',
+        'campaign_id',
         'name',
-        'objective_type',
+        'style',
+        'style_type',
+        'show_mode',
         'paused',
-        'budget',
-        'remark_status',
+        'state',
+        'extends',
+        'remark_status'
     ];
 
 
@@ -39,16 +42,16 @@ class UcAdgroupModel extends UcModel
      * @param $value
      * @return mixed
      */
-    public function getBudgetAttribute($value){
-        return $value / 100;
+    public function getExtendsAttribute($value){
+        return json_decode($value);
     }
 
     /**
      * 属性修饰器
      * @param $value
      */
-    public function setBudgetAttribute($value){
-        $this->attributes['budget'] = $value * 100;
+    public function setExtendsAttribute($value){
+        $this->attributes['extends'] = json_encode($value);
     }
 
 }

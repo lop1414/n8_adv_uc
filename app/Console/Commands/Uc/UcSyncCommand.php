@@ -5,6 +5,7 @@ namespace App\Console\Commands\Uc;
 use App\Common\Console\BaseCommand;
 use App\Common\Tools\CustomException;
 use App\Services\Uc\UcAdgroupService;
+use App\Services\Uc\UcCampaignService;
 
 class UcSyncCommand extends BaseCommand
 {
@@ -69,10 +70,10 @@ class UcSyncCommand extends BaseCommand
                 echo "同步推广组\n";
                 $service = new UcAdgroupService();
                 break;
-//            case 'campaign':
-//                echo "同步推广计划\n";
-//                $service = new UcCampaignService();
-//                break;
+            case 'campaign':
+                echo "同步推广计划\n";
+                $service = new UcCampaignService();
+                break;
 //            case 'creative':
 //                echo "同步创意\n";
 //                $service = new UcCreativeService();

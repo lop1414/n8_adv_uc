@@ -43,7 +43,7 @@ class UcCreativeModel extends UcModel
      * @return mixed
      */
     public function getExtendsAttribute($value){
-        return json_decode($value);
+        return json_decode($value,true);
     }
 
     /**

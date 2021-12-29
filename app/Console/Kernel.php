@@ -35,6 +35,7 @@ class Kernel extends ConsoleKernel
         // 百度同步任务
         $schedule->command('uc:sync --type=adgroup')->cron('*/20 * * * *');
         $schedule->command('uc:sync --type=campaign')->cron('*/20 * * * *');
+        $schedule->command('uc:sync --type=creative_template')->cron('*/20 * * * *');
         $schedule->command('uc:sync --type=creative')->cron('*/20 * * * *');
     }
 }

@@ -9,21 +9,24 @@ trait Creative
     /**
      * @param $params
      * @return mixed
-     * 并发获取信息流原生创意信息
+     * 并发获取创意样式模板
      */
-    public function multiGetCreative($params){
-        $url = $this->getUrl('api/creative/getCreativeByCampaignId');
-
+    public function multiGetCreativeTemplate($params){
+        $url = $this->getUrl('api/creative/getCreativeTemplates');
         $reqParams = [];
         foreach ($params as $item){
-            $reqParams[] = [
-                'body' => [
-                    'campaignIds'    => $item['campaign_ids']
-                ],
-                'header' =>  [
-                    'target' => $item['account_name']
-                ]
-            ];
+            if(!empty($item['adgroup_ids'])){
+                foreach ($item['adgroup_ids'] as $adgroupId){
+                    $reqParams[] = [
+                        'body' => [
+                            'adGroupId'    => $adgroupId
+                        ],
+                        'header' =>  [
+                            'target' => $item['account_name']
+                        ]
+                    ];
+                }
+            }
         }
 
         return $this->multiGet($url,$reqParams);

@@ -97,5 +97,5 @@ $router->group([
 
 $router->group(['middleware' => ['access_control_allow_origin']], function () use ($router) {
     // 点击
-    $router->get('Front/click', 'Front\AdvClickController@index');
+    $router->get('front/click', 'Front\AdvClickController@index');
 });

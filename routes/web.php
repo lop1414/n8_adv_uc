@@ -35,27 +35,6 @@ $router->group([
         $router->post('batch_update_admin', 'Admin\Uc\AccountController@batchUpdateAdmin');
     });
 
-    //百度
-    $router->group(['prefix' => 'baidu'], function () use ($router) {
-        // 推广计划
-        $router->group(['prefix' => 'campaign'], function () use ($router) {
-            $router->post('select', 'Admin\BaiDu\CampaignController@select');
-            $router->post('get', 'Admin\BaiDu\CampaignController@get');
-            $router->post('read', 'Admin\BaiDu\CampaignController@read');
-        });
-        // 推广单元
-        $router->group(['prefix' => 'adgroup'], function () use ($router) {
-            $router->post('select', 'Admin\BaiDu\AdgroupController@select');
-            $router->post('get', 'Admin\BaiDu\AdgroupController@get');
-            $router->post('read', 'Admin\BaiDu\AdgroupController@read');
-        });
-        // 推广单元扩展
-        $router->group(['prefix' => 'adgroup_extend'], function () use ($router) {
-            $router->post('batch_update', 'Admin\BaiDu\AdgroupExtendController@batchUpdate');
-        });
-
-    });
-
     // 点击
     $router->group(['prefix' => 'click'], function () use ($router) {
         $router->post('select', 'Admin\ClickController@select');

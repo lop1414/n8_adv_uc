@@ -1,5 +1,5 @@
 <?php
-namespace App\Http\Controllers\Admin\UC;
+namespace App\Http\Controllers\Admin\Uc;
 
 
 use App\Common\Enums\StatusEnum;

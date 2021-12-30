@@ -7,7 +7,6 @@ namespace App\Sdks\Uc;
 use App\Sdks\Uc\Traits\Adgroup;
 use App\Sdks\Uc\Traits\Campaign;
 use App\Sdks\Uc\Traits\Creative;
-use App\Sdks\Uc\Traits\Report;
 use App\Sdks\Uc\Traits\Error;
 use App\Sdks\Uc\Traits\MultiRequest;
 use App\Sdks\Uc\Traits\Token;
@@ -26,7 +25,6 @@ class Uc
     use Adgroup;
     use Campaign;
     use Creative;
-    use Report;
 
     /**
      * 公共接口地址

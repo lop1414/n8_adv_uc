@@ -70,7 +70,7 @@ class ClickController extends AdminController
             $this->validRule($request->post(), [
                 'muid' => 'required'
             ]);
-            $muid = trim($request->post('muid'));
+            $muid = md5(trim($request->post('muid')));
 
             // 2小时内
             $datetime = date('Y-m-d H:i:s', strtotime("-2 hours"));

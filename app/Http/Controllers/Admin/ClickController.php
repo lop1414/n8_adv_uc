@@ -33,8 +33,8 @@ class ClickController extends AdminController
     public function selectPrepare(){
         $this->curdService->selectQueryBefore(function(){
             $this->curdService->customBuilder(function($builder){
-                // 24小时内
-                $datetime = date('Y-m-d H:i:s', strtotime("-24 hours"));
+                // 2小时内
+                $datetime = date('Y-m-d H:i:s', strtotime("-2 hours"));
                 $builder->where('click_at', '>', $datetime);
             });
         });

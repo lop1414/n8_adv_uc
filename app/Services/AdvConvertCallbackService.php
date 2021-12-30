@@ -86,16 +86,15 @@ class AdvConvertCallbackService extends ConvertCallbackService
 
         $callbackUrl = $click->callback_url;
         $callbackUrl .= '&type='.$eventType;
-        $callbackUrl .= '&oaid='.$eventType;
-        $click->os == 0 && $callbackUrl .= '&idfa_sum='.$click->muid;
-        $click->os == 1 && $callbackUrl .= '&idfa_sum='.$click->muid;
+        $callbackUrl .= '&oaid='.$click->oaid;
+        $click->os == 0 && $callbackUrl .= '&idfa='.$click->muid;
+        $click->os == 1 && $callbackUrl .= '&imei_sum='.$click->muid;
         $convertAt > 0 && $callbackUrl .= '&event_time='.$convertAt;
         // 回传金额
         if($payAmount > 0){
             $callbackUrl .= '&money='.$payAmount;
         }
         file_get_contents($callbackUrl);
-
         return true;
     }
 

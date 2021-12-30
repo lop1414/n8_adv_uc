@@ -8,9 +8,6 @@ use App\Common\Helpers\Functions;
 use App\Common\Tools\CustomException;
 use App\Enums\Uc\UcSyncTypeEnum;
 use App\Http\Controllers\Admin\BaseController;
-use App\Models\BaiDu\BaiDuAccountModel;
-use App\Sdks\BaiDu\Traits\Request;
-use App\Services\Task\TaskBaiDuSyncService;
 
 
 class UcController extends BaseController

@@ -56,7 +56,7 @@ class UcSyncCommand extends BaseCommand
         $option = ['log' => true];
         $this->lockRun(
             [$service, 'sync'],
-            'baidu|sync|'.$param['type'],
+            'uc|sync|'.$param['type'],
             3600 * 3,
             $option,
             $param

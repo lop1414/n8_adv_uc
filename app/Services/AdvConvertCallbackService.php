@@ -151,37 +151,6 @@ class AdvConvertCallbackService extends ConvertCallbackService
     }
 
 
-    /**
-     * @param $url
-     * @param array $data
-     * @return bool|string
-     */
-    public function curlPost($url , $data = []){
-
-        $ch = curl_init($url);
-
-        curl_setopt($ch, CURLOPT_HEADER, false);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_FOLLOWLOCATION, true);
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-type: application/json']);
-
-        if(stripos($url, 'https://') === 0){
-            curl_setopt($ch, CURLOPT_SSL_VERIFYPEER , false);
-        }
-
-        curl_setopt($ch, CURLOPT_POST, true);
-
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($data));
-
-        $output = curl_exec($ch);
-
-        curl_close($ch);
-
-        return json_decode($output, true);
-
-    }
-
-
 
     /**
      * @param $click
@@ -190,8 +159,8 @@ class AdvConvertCallbackService extends ConvertCallbackService
     public function filterClickData($click){
         return [
             'id' => $click['id'],
-            'campaign_id' => $click['campaign_id'],
-            'ad_id' => $click['adgroup_id'],
+            'campaign_id' => $click['adgroup_id'],
+            'ad_id' => $click['campaign_id'],
             'creative_id' => $click['creative_id'],
             'click_at' => $click['click_at'],
         ];

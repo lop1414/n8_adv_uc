@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Common\Console\ConvertCallbackCommand;
 use App\Common\Console\Queue\QueueClickCommand;
 use App\Console\Commands\SyncChannelCampaignCommand;
 use App\Console\Commands\Uc\UcSyncCommand;
@@ -20,7 +21,9 @@ class Kernel extends ConsoleKernel
         SyncChannelCampaignCommand::class,
 
         // 队列
-        QueueClickCommand::class
+        QueueClickCommand::class,
+        // 转化回传
+        ConvertCallbackCommand::class,
     ];
 
     /**
@@ -37,7 +40,10 @@ class Kernel extends ConsoleKernel
         // 同步渠道-推广计划
         $schedule->command('sync_channel_campaign --date=today')->cron('*/2 * * * *');
 
-        // 百度同步任务
+        // 转化上报
+        $schedule->command('convert_callback')->cron('* * * * *');
+
+        //同步任务
         $schedule->command('uc:sync --type=adgroup')->cron('*/20 * * * *');
         $schedule->command('uc:sync --type=campaign')->cron('*/20 * * * *');
         $schedule->command('uc:sync --type=creative')->cron('*/20 * * * *');

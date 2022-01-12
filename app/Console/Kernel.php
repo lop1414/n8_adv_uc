@@ -4,7 +4,10 @@ namespace App\Console;
 
 use App\Common\Console\ConvertCallbackCommand;
 use App\Common\Console\Queue\QueueClickCommand;
+use App\Common\Helpers\Functions;
 use App\Console\Commands\SyncChannelCampaignCommand;
+use App\Console\Commands\Uc\Report\UcSyncAccountReportCommand;
+use App\Console\Commands\Uc\Report\UcSyncCreativeReportCommand;
 use App\Console\Commands\Uc\UcSyncCommand;
 use Illuminate\Console\Scheduling\Schedule;
 use Laravel\Lumen\Console\Kernel as ConsoleKernel;
@@ -24,6 +27,9 @@ class Kernel extends ConsoleKernel
         QueueClickCommand::class,
         // 转化回传
         ConvertCallbackCommand::class,
+        // UC
+        UcSyncAccountReportCommand::class,
+        UcSyncCreativeReportCommand::class
     ];
 
     /**
@@ -47,5 +53,19 @@ class Kernel extends ConsoleKernel
         $schedule->command('uc:sync --type=adgroup')->cron('*/20 * * * *');
         $schedule->command('uc:sync --type=campaign')->cron('*/20 * * * *');
         $schedule->command('uc:sync --type=creative')->cron('*/20 * * * *');
+
+        // 正式
+        if(Functions::isProduction()){
+
+            // UC账户报表同步
+            $schedule->command('uc:sync_account_report --date=today --has_history_cost=1 --key_suffix=has_history_cost')->cron('*/2 * * * *');
+            $schedule->command('uc:sync_account_report --date=today')->cron('15 * * * *');
+            $schedule->command('uc:sync_account_report --date=yesterday --key_suffix=yesterday')->cron('25-30 10 * * *');
+
+            // 巨量创意报表同步
+            $schedule->command('uc:sync_creative_report --date=today --run_by_account_cost=1 --multi_chunk_size=5')->cron('*/2 * * * *');
+            $schedule->command('uc:sync_creative_report --date=yesterday --key_suffix=yesterday')->cron('10-15 9,14 * * *');
+
+        }
     }
 }

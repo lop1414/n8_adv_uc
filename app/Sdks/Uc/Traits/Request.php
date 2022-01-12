@@ -19,8 +19,33 @@ trait Request
      * 携带认证请求
      */
     public function authRequest($url, $param = [], $method = 'GET', $header = [], $option = []){
+        $reqParam = $this->filterReqParam($param);
+
+        $header = array_merge([
+            'Content-Type: application/json;',
+        ], $header);
+        return $this->publicRequest($url, json_encode($reqParam), $method, $header, $option);
+    }
 
 
+    public function authRequestFile($url, $param = [], $method = 'GET', $header = [], $option = []){
+        $reqParam = $this->filterReqParam($param);
+
+        $header = array_merge([
+            'Content-Type: application/json;',
+        ], $header);
+
+        return $this->curlRequest($url, json_encode($reqParam), $method, $header, $option);
+    }
+
+
+
+    /**
+     * @param $param
+     * @return array[]
+     * 过滤请求参数
+     */
+    public function filterReqParam($param){
         $reqParam =  [
             'header' => [
                 'username'  => $this->getAccountName(),
@@ -36,13 +61,10 @@ trait Request
         if(!empty($this->getTargetAccountName())){
             $reqParam['header']['target'] = $this->getTargetAccountName();
         }
-
-
-        $header = array_merge([
-            'Content-Type: application/json;',
-        ], $header);
-        return $this->publicRequest($url, json_encode($reqParam), $method, $header, $option);
+        return $reqParam;
     }
+
+
 
 
     /**

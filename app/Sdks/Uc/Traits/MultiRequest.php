@@ -72,6 +72,7 @@ $i++;
             }
 
             $result = json_decode($v['result'], true);
+
             if(!isset($result['header']['status']) || $result['header']['status'] != 0){
                 // 错误提示
                 $errorMessage = $result['msg'] ?? '并发请求错误';
@@ -127,8 +128,8 @@ $i++;
             curl_multi_add_handle($mh, $ch);
 Functions::consoleDump($ch);
 
-            $chs[strval($ch)] = $ch;
-            $reqs[strval($ch)] = [
+            $chs[strval(json_encode($ch))] = $ch;
+            $reqs[strval(json_encode($ch))] = [
                 'url' => $url,
                 'param' => $param,
                 'method' => $method,
@@ -145,7 +146,7 @@ Functions::consoleDump($ch);
                     $info = curl_getinfo($done["handle"]);
                     $error = curl_error($done["handle"]);
                     $result = curl_multi_getcontent($done["handle"]);
-                    $req = $reqs[strval($done["handle"])];
+                    $req = $reqs[strval(json_encode($done["handle"]))];
                     $rtn = compact('info', 'error', 'result', 'url', 'req');
 
                     $res[] = $rtn;

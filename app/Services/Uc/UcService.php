@@ -6,11 +6,14 @@ use App\Common\Enums\StatusEnum;
 use App\Common\Services\BaseService;
 use App\Common\Tools\CustomException;
 use App\Enums\RemarkStatusEnum;
+use App\Enums\Uc\UcCampaignStatusEnum;
+use App\Models\Uc\Report\UcAccountReportModel;
 use App\Models\Uc\UcAccountModel;
 use App\Models\Uc\UcAdgroupModel;
 use App\Models\Uc\UcCampaignModel;
 use App\Models\Uc\UcCreativeModel;
 use App\Sdks\Uc\Uc;
+use Illuminate\Support\Facades\DB;
 
 
 class UcService extends BaseService
@@ -130,6 +133,7 @@ class UcService extends BaseService
     }
 
 
+
     public function syncItem($subAccount){
         throw new CustomException([
             'code' => 'METHOD_NOT_IMPLEMENTED',
@@ -182,24 +186,53 @@ class UcService extends BaseService
      * @return mixed
      * 获取在跑账户id
      */
-//    public function getRunningAccountIds(){
-//        // 在跑状态
-//        $runningStatus = [
-//            BaiDuAdgroupStatusEnum::ADGROUP_STATUS_OK,
-//        ];
-//        $runningStatusStr = implode("','", $runningStatus);
-//
-//        $baiduAccountModel = new BaiDuAccountModel();
-//        $baiduAccountIds = $baiduAccountModel->whereRaw("
-//            account_id IN (
-//                SELECT account_id FROM baidu_adgroups
-//                    WHERE `status` IN ('{$runningStatusStr}')
-//                    GROUP BY account_id
-//            )
-//        ")->pluck('account_id');
-//
-//        return $baiduAccountIds->toArray();
-//    }
+    public function getRunningAccountIds(){
+        // 在跑状态
+        $runningStatus = [
+            UcCampaignStatusEnum::CAMPAIGN_STATUS_DELIVERY_OK,
+            UcCampaignStatusEnum::CAMPAIGN_STATUS_BUDGET_EXCEED,
+            UcCampaignStatusEnum::CAMPAIGN_STATUS_PRE_OFFLINE_BUDGET,
+        ];
+        $runningStatusStr = implode("','", $runningStatus);
+
+        $ucAccountModel = new UcAccountModel();
+        $ucAccountIds = $ucAccountModel->whereRaw("
+            account_id IN (
+                SELECT account_id FROM uc_campaigns
+                    WHERE `status` IN ('{$runningStatusStr}')
+                    GROUP BY account_id
+            )
+        ")->pluck('account_id');
+
+        return $ucAccountIds->toArray();
+    }
+
+
+    /**
+     * @param $accountIds
+     * @return mixed
+     * 获取存在历史消耗账户
+     */
+    public function getHasHistoryCostAccount($accountIds){
+        $today = date('Y-m-d');
+        $startDate = date('Y-m-d', strtotime('-3 days', strtotime($today)));
+
+        $ucAccountReportModel = new UcAccountReportModel();
+        $builder = $ucAccountReportModel->whereBetween('stat_datetime', ["{$startDate} 00:00:00", "{$today} 23:59:59"]);
+
+        if(!empty($accountIds)){
+            $builder->whereIn('account_id', $accountIds);
+        }
+
+        $report = $builder->groupBy('account_id')
+            ->orderBy('consume', 'DESC')
+            ->select(DB::raw("account_id, SUM(consume) consume"))
+            ->pluck('account_id');
+
+        return $report->toArray();
+    }
+
+
 
     /**
      * @param array $accountIds
@@ -297,25 +330,13 @@ class UcService extends BaseService
         }
         $res = $this->sdkMultiGetList($accountNames,$param,1,$pageSize);
 
-        // 查询其他页数
-        $more = [];
+        $data = [];
         foreach($res as $v){
-            $totalPage = empty($v['totalRowNumber']) ? 1 : ceil($v['totalRowNumber']/$pageSize);
+            // 读取csv文件信息
 
-            if( $totalPage > 1){
-                for($i = 2; $i <= $totalPage; $i++){
-                    $more[$i][] = $v['account_name'];
-                }
-            }
         }
 
-        // 多页数据
-        foreach($more as $page => $accountNames){
-            $tmp = $this->sdkMultiGetList($accountNames,$param,$page,$pageSize);
-            $res = array_merge($res, $tmp);
-        }
-
-        return $res;
+        return $data;
     }
 
 

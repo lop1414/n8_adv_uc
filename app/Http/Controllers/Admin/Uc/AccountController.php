@@ -86,9 +86,9 @@ class AccountController extends UcController
      */
     public function createPrepare(){
         $this->saveValidRule();
-        $this->curdService->addColumns(['account_id']);
         $this->curdService->saveBefore(function(){
             $this->curdService->handleData['parent_id'] = 0;
+            $this->curdService->handleData['admin_id'] = 0;
         });
     }
 

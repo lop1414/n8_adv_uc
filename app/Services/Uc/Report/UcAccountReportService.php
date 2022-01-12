@@ -39,7 +39,7 @@ class UcAccountReportService extends UcReportService
             $saveData[] = [
                 'account_id' => $item['account_id'],
                 'stat_datetime' => $dateTime,
-                'consume' => $item['consume'],
+                'consume' => $item['consume'] * 100,
                 'srch' => $item['srch'],
                 'click' => $item['click'],
                 'extends' => json_encode($item),

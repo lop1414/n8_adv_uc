@@ -61,10 +61,12 @@ class Kernel extends ConsoleKernel
             $schedule->command('uc:sync_account_report --date=today --has_history_cost=1 --key_suffix=has_history_cost')->cron('*/2 * * * *');
             $schedule->command('uc:sync_account_report --date=today')->cron('15 * * * *');
             $schedule->command('uc:sync_account_report --date=yesterday --key_suffix=yesterday')->cron('25-30 10 * * *');
+            $schedule->command('uc:sync_account_report --date=yesterday --key_suffix=yesterday')->cron('31-40 10 * * *');
 
             // 巨量创意报表同步
             $schedule->command('uc:sync_creative_report --date=today --run_by_account_cost=1')->cron('*/2 * * * *');
             $schedule->command('uc:sync_creative_report --date=yesterday --key_suffix=yesterday')->cron('10-15 9,14 * * *');
+            $schedule->command('uc:sync_creative_report --date=yesterday --key_suffix=yesterday')->cron('16-21 9,14 * * *');
 
         }
     }

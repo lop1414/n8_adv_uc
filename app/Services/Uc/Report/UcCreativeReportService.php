@@ -44,7 +44,7 @@ class UcCreativeReportService extends UcReportService
                 'campaign_id' => $item['campaign_id'],
                 'creative_id' => $item['creative_id'],
                 'stat_datetime' => $dateTime,
-                'consume' => $item['consume'],
+                'consume' => $item['consume'] * 100,
                 'srch' => $item['srch'],
                 'click' => $item['click'],
                 'binding_conversion' => $item['binding_conversion'],

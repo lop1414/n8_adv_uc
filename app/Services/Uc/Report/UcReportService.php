@@ -54,11 +54,7 @@ class UcReportService extends UcService
             $accountIds = $option['account_ids'];
         }
 
-        // 并发分片大小
-        if(!empty($option['multi_chunk_size'])){
-            $multiChunkSize = min(intval($option['multi_chunk_size']), 8);
-            $this->sdk->setMultiChunkSize($multiChunkSize);
-        }
+
 
         // 在跑账户
         if(!empty($option['running'])){
@@ -106,6 +102,13 @@ class UcReportService extends UcService
 
         foreach ($accountGroups as $groups){
             $this->setSdk($groups['name'],$groups['password'],$groups['token']);
+
+            // 并发分片大小
+            if(!empty($option['multi_chunk_size'])){
+                $multiChunkSize = min(intval($option['multi_chunk_size']), 8);
+                $this->sdk->setMultiChunkSize($multiChunkSize);
+            }
+
             foreach ($groups['list'] as $account){
                 foreach($dateList as $date) {
                     $taskId = $this->getTaskId($date,$account['account_id']);

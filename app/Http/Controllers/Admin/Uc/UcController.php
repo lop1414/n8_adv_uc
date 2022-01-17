@@ -36,6 +36,12 @@ class UcController extends BaseController
                             WHERE admin_id = {$adminId}
                     )");
                 }
+                // 关键字
+                $keyword = $this->curdService->requestData['keyword'] ?? '';
+                if(!empty($keyword)){
+                    $primaryKey = $this->model->getPrimaryKey();
+                    $builder->whereRaw(" (`name` LIKE '%{$keyword}%' OR `{$primaryKey}` LIKE '%{$keyword}%')");
+                }
             });
         });
     }

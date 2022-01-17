@@ -78,6 +78,15 @@ class UcCampaignModel extends UcModel
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * 关联推广账户
+     */
+    public function uc_account(){
+        return $this->hasOne('App\Models\Uc\UcAccountModel', 'account_id', 'account_id');
+    }
+
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
      * 关联推广组
      */
     public function uc_adgroup(){

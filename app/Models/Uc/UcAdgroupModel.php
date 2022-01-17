@@ -51,4 +51,13 @@ class UcAdgroupModel extends UcModel
         $this->attributes['budget'] = $value * 100;
     }
 
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     * 关联推广账户
+     */
+    public function uc_account(){
+        return $this->hasOne('App\Models\Uc\UcAccountModel', 'account_id', 'account_id');
+    }
+
 }

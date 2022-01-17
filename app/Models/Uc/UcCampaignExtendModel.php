@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Models\BaiDu;
+namespace App\Models\Uc;
 
 use App\Common\Models\BaseModel;
 

@@ -35,6 +35,27 @@ $router->group([
         $router->post('batch_update_admin', 'Admin\Uc\AccountController@batchUpdateAdmin');
     });
 
+    //UC
+    $router->group(['prefix' => 'uc'], function () use ($router) {
+        // 推广计划
+        $router->group(['prefix' => 'adgroup'], function () use ($router) {
+            $router->post('select', 'Admin\Uc\AdgroupController@select');
+            $router->post('get', 'Admin\Uc\AdgroupController@get');
+            $router->post('read', 'Admin\Uc\AdgroupController@read');
+        });
+        // 推广单元
+        $router->group(['prefix' => 'campaign'], function () use ($router) {
+            $router->post('select', 'Admin\Uc\CampaignController@select');
+            $router->post('get', 'Admin\Uc\CampaignController@get');
+            $router->post('read', 'Admin\Uc\CampaignController@read');
+        });
+        // 推广单元扩展
+        $router->group(['prefix' => 'campaign_extend'], function () use ($router) {
+            $router->post('batch_update', 'Admin\Uc\CampaignExtendController@batchUpdate');
+        });
+
+    });
+
     // 点击
     $router->group(['prefix' => 'click'], function () use ($router) {
         $router->post('select', 'Admin\ClickController@select');
@@ -56,7 +77,7 @@ $router->group([
     // 子任务
     $router->group(['prefix' => 'sub_task'], function () use ($router) {
 
-        // 百度同步
+        // UC同步
         $router->group(['prefix' => 'baidu_sync'], function () use ($router) {
             $router->post('select', 'Admin\SubTask\TaskBaiDuSyncController@select');
             $router->post('read', 'Admin\SubTask\TaskBaiDuSyncController@read');

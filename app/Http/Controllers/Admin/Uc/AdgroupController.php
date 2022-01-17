@@ -28,7 +28,7 @@ class AdgroupController extends UcController
         $this->curdService->selectQueryAfter(function(){
             foreach ($this->curdService->responseData['list'] as $item){
                 $item->uc_account;
-                $item->admin_name = $this->adminMap[$item->baidu_account->admin_id]['name'];
+                $item->admin_name = $this->adminMap[$item->uc_account->admin_id]['name'];
             }
         });
     }

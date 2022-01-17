@@ -49,7 +49,7 @@ class CampaignController extends UcController
                 $item->channel_campaign;
                 $item->uc_adgroup;
                 $item->uc_account;
-                $item->admin_name = $this->adminMap[$item->baidu_account->admin_id]['name'];
+                $item->admin_name = $this->adminMap[$item->uc_account->admin_id]['name'];
             }
         });
 

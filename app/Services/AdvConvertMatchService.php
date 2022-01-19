@@ -8,7 +8,7 @@ use App\Common\Enums\ConvertTypeEnum;
 use App\Common\Models\ClickModel;
 use App\Common\Models\ConvertCallbackModel;
 use App\Common\Services\ConvertMatchService;
-use App\Models\BaiDu\UcCampaignExtendModel;
+use App\Models\Uc\UcCampaignExtendModel;
 
 class AdvConvertMatchService extends ConvertMatchService
 {

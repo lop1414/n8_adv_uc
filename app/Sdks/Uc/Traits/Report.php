@@ -51,20 +51,26 @@ trait Report
     public function getAccountTaskData($taskId){
         $csvContent = $this->getDownloadFile($taskId);
         $list = explode("\r\n",$csvContent);
+        $fieldName =  explode(',',$list[0]);
         unset($list[0]);
         $data = [];
         foreach ($list as $item){
             if(empty($item)) continue;
             $tmp = explode(',',$item);
+            // 字段名映射成下标
+            $tmpItem = [];
+            foreach ($fieldName as $k => $v){
+                $tmpItem[$v] =$tmp[$k];
+            }
 
             $data[] = [
-                'date'              => $tmp[0],
-                'time'              => $tmp[1],
-                'account_id'        => $tmp[3],
-                'srch'              => $tmp[4],
-                'click'             => $tmp[5],
-                'consume'           => $tmp[6],
-                'binding_conversion'=> $tmp[7],
+                'date'              => $tmpItem['日期'],
+                'time'              => $tmpItem['时间'],
+                'account_id'        => $tmpItem['账户ID'],
+                'srch'              => intval($tmpItem['展现数']),
+                'click'             => intval($tmpItem['点击数']),
+                'consume'           => $tmpItem['消费'],
+                'binding_conversion'=> intval($tmpItem['转化数（回传时间）'])
             ];
         }
         return $data;
@@ -97,22 +103,29 @@ trait Report
     public function getCreativeTaskData($taskId){
         $csvContent = $this->getDownloadFile($taskId);
         $list = explode("\r\n",$csvContent);
+        $fieldName =  explode(',',$list[0]);
         unset($list[0]);
         $data = [];
         foreach ($list as $item){
             if(empty($item)) continue;
             $tmp = explode(',',$item);
+            // 字段名映射成下标
+            $tmpItem = [];
+            foreach ($fieldName as $k => $v){
+                $tmpItem[$v] =$tmp[$k];
+            }
+
             $data[] = [
-                'date'              => $tmp[0],
-                'time'              => $tmp[1],
-                'account_id'        => $tmp[2],
-                'adgroup_id'        => $tmp[4],
-                'campaign_id'       => $tmp[6],
-                'creative_id'       => $tmp[8],
-                'srch'              => $tmp[14],
-                'click'             => $tmp[15],
-                'consume'           => $tmp[16],
-                'binding_conversion'=> $tmp[17],
+                'date'              => $tmpItem['日期'],
+                'time'              => $tmpItem['时间'],
+                'account_id'        => $tmpItem['账户ID'],
+                'adgroup_id'        => $tmpItem['推广组ID'],
+                'campaign_id'       => $tmpItem['推广计划ID'],
+                'creative_id'       => $tmpItem['创意ID'],
+                'srch'              => intval($tmpItem['展现数']),
+                'click'             => intval($tmpItem['点击数']),
+                'consume'           => $tmpItem['消费'],
+                'binding_conversion'=> intval($tmpItem['转化数（回传时间）']),
             ];
         }
         return $data;

@@ -108,13 +108,15 @@ trait Report
         $data = [];
         foreach ($list as $item){
             if(empty($item)) continue;
+
+            // 替换标签 里面可能有逗号
+            $item = preg_replace('/".+"/','TITLE',$item);
             $tmp = explode(',',$item);
             // 字段名映射成下标
             $tmpItem = [];
             foreach ($fieldName as $k => $v){
                 $tmpItem[$v] =$tmp[$k];
             }
-
             $data[] = [
                 'date'              => $tmpItem['日期'],
                 'time'              => $tmpItem['时间'],

@@ -26,6 +26,11 @@ class UcAdgroupService extends UcService
                 : $item['req']['param']['header']['username'];
 
             $account = $this->getAccountByName($accountName);
+
+            if(!isset($item['data']['body']['adGroupTypes'])){
+                echo "没有数据\n";
+                continue;
+            }
             foreach ($item['data']['body']['adGroupTypes'] as $campaign){
                 $saveData[] = [
                     'id'                => $campaign['id'],
